@@ -13,7 +13,7 @@
 # Revision History
 #	Version		Date			Details
 #   =========	=============	========================================
-#	1.0			8-Jan-2017		Initial release
+#	1.0			13-Jan-2017		Initial release
 #
 #
 #
@@ -26,4 +26,57 @@ set -o errexit -o nounset -o noclobber -o pipefail
 SERIALID=`fgrep Serial  /proc/cpuinfo | head -1 | awk '{ print $3 }'`
 OUTFILE=/tmp/$SERIALID
 
-# Find out what type of Pi this is
+echo "******************************************************************"
+echo " CognIoT Configuration ........"
+echo " "
+
+PIREV=`cat /proc/cpuinfo |grep Revision |cut -d' ' -f2`
+
+
+case "$PIREV" in
+
+# Raspberry Pi Model 2 v1.1 and v1.2
+
+a01040)
+a01041)
+a21041)
+a22042)
+		
+		echo "Raspberry Pi Model 2 .........."  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
+
+# Raspberry Pi Model 3
+a02082)
+a22082)
+
+		
+		echo "Raspberry Pi Model 3 .........."  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
+*) 
+
+	echo "Sorry - a configuration for your Raspberry Pi does not exist.";
+	echo "Please contact CognIoT support for help";
+
+esac
+
+
+echo "*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*"
+echo " "
+echo " In order to make these configuration changes active, please "
+echo "  reboot this Raspberry Pi."
+echo " "
+echo " Type sudo reboot at the command line prompt"
+echo " "
+
