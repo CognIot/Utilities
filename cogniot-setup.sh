@@ -38,11 +38,38 @@ case "$PIREV" in
 # Raspberry Pi Model 2 v1.1 and v1.2
 
 a01040)
+		echo "Raspberry Pi Model 2 v1.0........."  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
+
 a01041)
+		echo "Raspberry Pi Model 2 v1.1. (Sony)........"  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
+
 a21041)
+		echo "Raspberry Pi Model 2 v1.1 (Sony)........."  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
+
 a22042)
 		
-		echo "Raspberry Pi Model 2 .........."  ;
+		echo "Raspberry Pi Model 2 v1.2 (Embest).........."  ;
 		echo "Disabling Serial Terminal..........";
 		sudo raspi-config nonint do_serial 1 ;
 		echo " ";
@@ -53,10 +80,19 @@ a22042)
 
 # Raspberry Pi Model 3
 a02082)
+		
+		echo "Raspberry Pi Model 3 (Sony).........."  ;
+		echo "Disabling Serial Terminal..........";
+		sudo raspi-config nonint do_serial 1 ;
+		echo " ";
+		echo "Enabling serial port on GPIO 14 & 15.......";
+		sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+		echo ;;
+
 a22082)
 
 		
-		echo "Raspberry Pi Model 3 .........."  ;
+		echo "Raspberry Pi Model 3 (Embest).........."  ;
 		echo "Disabling Serial Terminal..........";
 		sudo raspi-config nonint do_serial 1 ;
 		echo " ";
