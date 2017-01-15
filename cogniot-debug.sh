@@ -35,18 +35,19 @@ OUTFILE=/tmp/$SERIALID
 if [ -d $OUTFILE ]
 then
 	rm -rf $OUTFILE
+	mkdir $OUTFILE
 else 
 	mkdir $OUTFILE
-	touch $OUTFILE/sysconfig.txt
-	touch $OUTFILE/installed_pkgs.txt
-	touch $OUTFILE/pip_pkgs.txt
-	touch $OUTFILE/pip3_pkgs.txt
-	touch $OUTFILE/type.txt
-	touch $OUTFILE/gpio.config
-	touch $OUTFILE/devices.txt
-	
-	
 fi
+
+touch $OUTFILE/sysconfig.txt
+touch $OUTFILE/installed_pkgs.txt
+touch $OUTFILE/pip_pkgs.txt
+touch $OUTFILE/pip3_pkgs.txt
+touch $OUTFILE/type.txt
+touch $OUTFILE/gpio.config
+touch $OUTFILE/devices.txt
+
 
 # Check to see if the "wiringpi" package is installed.
 #  if not, install it
@@ -76,4 +77,14 @@ cp /boot/cmdline.txt $OUTFILE/
 echo `ls -l /dev/ser*` >>$OUTFILE/devices.txt
 
 
+tar -czf COGNIOT_DEBUG.tar.gz -C /tmp $SERIALID
+
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo " "
+echo " Please email the file COGNIOT_DEBUG.tar.gz to CognIoT Support   "
+echo " and we will get back to you as soon as possible."
+echo " "
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+rm -rf $OUTFILE
 
