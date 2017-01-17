@@ -19,7 +19,7 @@
 #
 #
 #
-
+#
 set -o errexit -o nounset -o noclobber -o pipefail
 
 # Variable declarations
