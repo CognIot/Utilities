@@ -14,7 +14,8 @@
 #	Version		Date			Details
 #   =========	=============	========================================
 #	1.0			13-Jan-2017		Initial release
-#
+#	1.1			20-Jan-2017		Added extra screen prompts and moved wiringpi and wiringpi_python install to this script
+#								
 #
 #
 #
@@ -27,7 +28,7 @@ SERIALID=`fgrep Serial  /proc/cpuinfo | head -1 | awk '{ print $3 }'`
 OUTFILE=/tmp/$SERIALID
 
 echo "******************************************************************"
-echo " CognIoT Configuration ........"
+echo " CognIoT Configuration Utility ........"
 echo " "
 
 PIREV=`cat /proc/cpuinfo |grep Revision |cut -d' ' -f2`
@@ -107,6 +108,31 @@ a22082)
 
 esac
 
+echo "Checking for wiring pi"
+# Check to see if the "wiringpi" package is installed.
+#  if not, install it
+
+if [ $(dpkg-query -W -f='${Status}' wiringpi 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+  sudo apt-get install wiringpi;
+else
+  echo "Already installed"
+fi
+
+
+
+
+echo "Checking for wiring pi python"
+
+# Check to see if the "wiringpi" pip package is installed for python.
+#  if not, install it
+
+if [ $(pip3 list 2>/dev/null | grep -c "wiringpi") -eq 0 ];
+then
+  sudo pip3 install wiringpi;
+else
+  echo "Already installed"
+fi
 
 echo "*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*"
 echo " "
