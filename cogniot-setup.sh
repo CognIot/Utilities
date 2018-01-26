@@ -15,12 +15,14 @@
 #   =========	=============	========================================
 #	1.0			13-Jan-2017		Initial release
 #	1.1			20-Jan-2017		Added extra screen prompts and moved wiringpi and wiringpi_python install to this script
-#								
+#	1.2         26-Jan-2018     Removed device specific config and added i2c setup
 #
 #
 #
 #
 #
+
+
 set -o errexit -o nounset -o noclobber -o pipefail
 
 # Variable declarations
@@ -117,6 +119,42 @@ sudo raspi-config nonint do_serial 1 ;
 echo " ";
 echo "Enabling serial port on GPIO 14 & 15.......";
 sudo sed -i -e 's/enable_uart=0/enable_uart=1/g' /boot/config.txt
+
+echo "Enabling I2C........"; 
+ 
+
+if [ $(grep -xc 'i2c-bcm2708' /etc/modules) -eq 0 ];
+then
+  sudo sh -c "echo 'i2c-bcm2708' >> /etc/modules"
+fi
+
+if [ $(grep -xc 'i2c-dev' /etc/modules) -eq 0 ];
+then
+  sudo sh -c "echo 'i2c-dev' >> /etc/modules"
+fi
+
+if [ $(grep -xc 'dtparam=i2c1=on' /boot/config.txt) -eq 0 ];
+then
+  sudo sh -c "echo 'dtparam=i2c1=on' >> /boot/config.txt"
+fi
+
+if [ $(grep -xc 'dtparam=i2c_arm=on' /boot/config.txt) -eq 0 ];
+then
+  sudo sh -c "echo 'dtparam=i2c_arm=on' >> /boot/config.txt"
+fi
+
+if [ -f /etc/modprobe.d/raspi-blacklist.conf ]; then
+  sudo sed -i 's/^blacklist spi-bcm2708/#blacklist spi-bcm2708/' /etc/modprobe.d/raspi-blacklist.conf
+  sudo sed -i 's/^blacklist i2c-bcm2708/#blacklist i2c-bcm2708/' /etc/modprobe.d/raspi-blacklist.conf
+fi
+ 
+echo "checking for i2c-tools"
+if [ $(dpkg-query -W -f='${Status}' i2c-tools 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+  sudo apt-get install -y i2c-tools;
+else
+  echo "Already installed"
+fi
 
 echo "Checking for wiring pi"
 # Check to see if the "wiringpi" package is installed.
